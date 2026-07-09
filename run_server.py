@@ -1,4 +1,5 @@
 """Production entry point with full exception capture and pre-flight checks."""
+import os
 import sys
 import traceback
 import asyncio
@@ -74,7 +75,7 @@ def main():
     config = uvicorn.Config(
         "backend.app.main:app",
         host="0.0.0.0",
-        port=5000,
+        port=int(os.environ.get("PORT", 5000)),
         log_level="info",
         loop="none",
     )
