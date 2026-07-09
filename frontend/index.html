@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo-login.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Essentia Suite</title>
+    <link rel="preload" href="/logo.png" as="image" />
+    <link rel="preload" href="/logo-login.png" as="image" />
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          registrations.forEach(function(registration) {
+            registration.unregister();
+          });
+        });
+        if ('caches' in window) {
+          caches.keys().then(function(names) {
+            names.forEach(function(name) {
+              caches.delete(name);
+            });
+          });
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
