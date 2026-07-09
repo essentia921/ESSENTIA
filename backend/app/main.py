@@ -91,6 +91,21 @@ async def lifespan(app: FastAPI):
     from db.accounts_db import init_autopilot_v2_tables
     from db.blog_db import init_blog_tables
     from backend.app.models.affiliate import init_affiliate_tables
+    # Bootstrap schema (necessario su DB vuoto, es. nuovo Supabase):
+    # 1) tabelle ORM (users, subscriptions, ...)  2) tabelle account/client (FK a users)  3) il resto.
+    try:
+        from backend.app.core.database import Base, engine
+        from backend.app.models import (  # noqa: F401 - l'import registra i modelli su Base.metadata
+            user, subscription, book, email_verification, password_reset, extractor,
+        )
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"ORM schema init warning: {e}")
+    try:
+        from db.accounts_db import init_accounts_db
+        init_accounts_db()
+    except Exception as e:
+        print(f"Accounts DB init warning: {e}")
     try:
         init_autopilot_v2_tables()
     except Exception as e:
